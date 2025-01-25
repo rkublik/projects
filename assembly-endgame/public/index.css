@@ -62,3 +62,35 @@ section.language-chips {
  border-radius: 4px;  
  padding: 4.5px;
 }
+
+.keyboard{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:6px;
+}
+
+.keyboard-key{
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    padding: 6px;
+    background-color: #FCBA29;
+    border: 1px solid #D7D7D7;    
+    color:#1E1E1E;
+}
+
+.keyboard-key.valid{
+    background-color: #10A95B;
+}
+
+.keyboard-key.invalid{
+    background-color: #EC5D49;
+    ;
+}
+
+section{
+    margin: 10px 0;
+}
+
