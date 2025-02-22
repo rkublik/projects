@@ -3,8 +3,10 @@ export default function KeyboardKey({keyObj, handleKeyPress}) {
     (keyObj.guessed ? keyObj.inWord ? " valid": " invalid": "")
     return <button 
             className={classVals}
+            aria-label={`Letter ${keyObj.key}`}
             onClick={handleKeyPress}
         >
-            {keyObj.key}
+            {keyObj.key} 
+            {keyObj.inWord}
         </button>
 }

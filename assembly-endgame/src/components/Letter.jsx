@@ -1,7 +1,8 @@
-export default function Letter({letter, found}){
+export default function Letter({letter, found, missing}){
+    const letterClass = ["letter", missing ? "not-found": ""].join(" ")
     return (
-        <div className="letter">
-            {found? letter: " "}
+        <div className={letterClass}>
+            {found || missing? letter: " "}
         </div>
     )
 }

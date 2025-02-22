@@ -1,14 +1,15 @@
 import React from "react"
+import Confetti from "react-confetti"
 import { useState, useEffect } from "react"
 import {languages} from "../data/languages.js"
 import Status from "./Status.jsx"
 import Chip from "./Chip.jsx"
 import Keyboard from "./Keyboard.jsx"
 import Word from "./Word.jsx"
-
+import { randomWord } from "../data/words.js"
 
 export default function AssemblyEndgame() {
-    const word = "foxglove".toUpperCase();
+    const [currentWord, setCurrentWord] = useState(() => randomWord().toUpperCase())
     
     const [keys, setKeys] = useState(() =>(
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(letter => (
@@ -16,7 +17,6 @@ export default function AssemblyEndgame() {
         ))
 
     ));
-
 
     const numWrong = keys.filter(letter => letter.guessed && !letter.inWord).length;
 
@@ -27,37 +27,41 @@ export default function AssemblyEndgame() {
     })
 
     const removedChips = languageChips.filter((langObj, idx) => (idx < numWrong)).map(chip => chip.props.name);
-    console.log(removedChips)
     
     const foundLetters = keys
         .filter(letter => letter.guessed && letter.inWord)
         .map(letter => letter.key)
 
-    const gameWon = word.split("").every((letter) => foundLetters.includes(letter));
+    // should follow convention isGameWon/isGameLost...
+    const gameWon = currentWord.split("").every((letter) => foundLetters.includes(letter));
     const gameLost = numWrong >= languageChips.length - 1
 
 
     const isGameOver = gameWon || gameLost;
     const outcome = isGameOver? gameWon? "win" : "lose": "progress"
 
-    if (isGameOver){console.log("game over")}
+    if (isGameOver){
+        const keyComponents = document.getElementsByClassName("keyboard-key");
+        for (const key of keyComponents){key.disabled=true;}
+    }
     
 
     function restartGame(){
-        setKeys(prevKeys => prevKeys.map((key)=> ({...key, guessed:false, inWord:false})))
+        setCurrentWord(randomWord().toUpperCase());
+        setKeys(prevKeys => prevKeys.map((keyObj)=> ({...keyObj, guessed:false, inWord:false})))
+        const keyComponents = document.getElementsByClassName("keyboard-key");
+        for (const key of keyComponents){key.disabled=false;}
     }
 
     function handleKeyPress (letter){
-        if(!isGameOver) {
         setKeys(prevKeys => prevKeys.map(
-            keyObj=> keyObj.key===letter? {
+            keyObj => keyObj.key===letter? {
                 ...keyObj,
                 guessed:true, 
-                inWord: word.includes(keyObj.key)
+                inWord: currentWord.includes(keyObj.key) //todo: check to remove chip here... check if already guessed letter?
             }: keyObj
         )
     )
-}
     }
 
     useEffect(()=>{
@@ -69,11 +73,12 @@ export default function AssemblyEndgame() {
             document.removeEventListener("keydown", keyHandler);
         }
         
-    }, [])
+    }, [currentWord])
 
-
+    console.log(currentWord)
     return (
         <main>
+            {gameWon? <Confetti/> : null} 
             <header>
                 <h1>Assembly: Endgame</h1>
                 <p>Guess the word within 8 attempts to keep the
@@ -84,7 +89,7 @@ export default function AssemblyEndgame() {
                 {languageChips}
             </section>
             <section className="word-display">
-                <Word word={word} found={foundLetters}/>
+                <Word word={currentWord} found={foundLetters} gameOver={isGameOver}/>
             </section>
             <Keyboard keys={keys} handleKeyPress={handleKeyPress}/>
             {isGameOver && <button className="new-game" onClick={restartGame} autoFocus >New Game</button>} 
@@ -94,7 +99,7 @@ export default function AssemblyEndgame() {
 
 /* todo:
  - set focus on new game button when game over
- - 
+ - keyboard listener seems stuck on initial word... because reference passed had original currentWord... 
 */
 
 
