@@ -8,6 +8,8 @@ import Keyboard from "./Keyboard.jsx"
 import Word from "./Word.jsx"
 import { randomWord } from "../data/words.js"
 
+import "./AssemblyEndgame.css";
+
 export default function AssemblyEndgame() {
     const [currentWord, setCurrentWord] = useState(() => randomWord().toUpperCase())
     
