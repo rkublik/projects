@@ -30,10 +30,10 @@ export default function App(){
             </div>
 
             <h2>Banners</h2>
-            <Banner title="Banner 1">
+            <Banner bannerType="success" title="Banner 1">
                 Some text here....
             </Banner>
-            <Banner title="Banner 2"/>
+            <Banner bannerType="error" title="Banner 2"/>
         </div>
     )
 }
