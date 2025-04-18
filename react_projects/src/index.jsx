@@ -1,10 +1,12 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
-import AssemblyEndgame from "./Apps/AssemblyEndgame/components/App.jsx"
 import Main from "./main.jsx"
 import {BrowserRouter, Routes, Route, Link} from "react-router"
 
+import AssemblyEndgame from "./Apps/AssemblyEndgame/components/App.jsx"
+import ComponentLibrary from "./Apps/ComponentLibrary/App.jsx"
 
+// TODO: fix css importing, have scoped to apps/components.
 
 function App(){
     return (
@@ -12,6 +14,7 @@ function App(){
             <Routes>
                 <Route path="/" element={<Main />}>
                     <Route path="assembly-endgame" element={<AssemblyEndgame/>}/>
+                    <Route path="component-library" element={<ComponentLibrary/>}/>
 
                     <Route path="*" element={<h2>Not Found</h2>} />
                 </Route>
